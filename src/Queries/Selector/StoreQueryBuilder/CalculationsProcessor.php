@@ -26,6 +26,7 @@ use Medas\EntityManager\Selector\{
     Conditions\WhereIsNull,
     Conditions\WhereIsTruthy,
     Conditions\WhereNotIn,
+    Conditions\WhereReferencedBy,
     Conditions\WhereStartsWith,
     Exceptions\UnhandledCalculationType,
     Exceptions\UnhandledOperantType,
@@ -45,6 +46,7 @@ readonly class CalculationsProcessor
 {
     public function __construct(
         private CollectionContainsCompiler $collectionContainsCompiler,
+        private ReferencedByCompiler       $referencedByCompiler,
         private ValueSerializer            $valueSerializer,
     )
     {
@@ -87,6 +89,7 @@ readonly class CalculationsProcessor
                     => $this->processCollectionContains($job, $calculation),
 
                 WhereNotIn::class => $this->processComparison($job, $calculation, ' not in '),
+                WhereReferencedBy::class => $this->processReferencedBy($job, $calculation),
                 WhereIsMoreThan::class => $this->processComparison($job, $calculation, '>'),
                 WhereIsLessThan::class => $this->processComparison($job, $calculation, '<'),
 
@@ -128,6 +131,43 @@ readonly class CalculationsProcessor
             $calculation->property,
             $valueQuery,
         );
+    }
+
+    private function processReferencedBy(Job $job, WhereReferencedBy $calculation): void
+    {
+        $referringStore = $this->referencedByCompiler->referringStore($job, $calculation);
+
+        $job->currentCalculation .= $this->referencedByCompiler->open(
+            $job,
+            $calculation,
+            $referringStore
+        );
+
+        // While the subquery's conditions are written, the referring entity's
+        // properties resolve to its aliased store; an outer join of the same
+        // entity gets its own store back afterwards.
+        $hadOuterStore = array_key_exists($calculation->referringEntity, $job->stores);
+        $outerStore = $job->stores[$calculation->referringEntity] ?? null;
+        $job->stores[$calculation->referringEntity] = $referringStore;
+
+        try {
+            foreach ($calculation->conditions as $condition) {
+                $job->currentCalculation .= ' and ';
+
+                $this->processCalculation($job, $condition);
+            }
+        }
+
+        finally{
+            if ($hadOuterStore) {
+                $job->stores[$calculation->referringEntity] = $outerStore;
+            }
+            else {
+                unset($job->stores[$calculation->referringEntity]);
+            }
+        }
+
+        $job->currentCalculation .= ')';
     }
 
     private function processNullComparison(Job $job, WhereIsNull $calculation, bool $isNull): void

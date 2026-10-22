@@ -66,7 +66,7 @@ readonly class StoreQueryBuilder
         }
 
         // A joined entity's columns would mix with the entity's own, and where names
-        // are the same (the id, the timestamps) the joined one's value would win.
+        // are the same (the id, the timestamps), the joined one's value would win.
         elseif ($definition->relations) {
             $outputValues = $this->ownColumns($database, $job, $quotedMainStore, $parentStores);
         }
