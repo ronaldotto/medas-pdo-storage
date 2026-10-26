@@ -58,6 +58,10 @@ class QueryExecutor implements ActionExecutor
         $this->serializeArguments($action, $databaseController->driverHandler->serializer());
 
         try {
+            if ($this->changesSchema($action->query)) {
+                $this->releasePreparedStatements($pdo);
+            }
+
             $preparedStatement = $this->preparedStatement($pdo, $action->query);
 
             if ($this->dispatchDebugInformation) {
@@ -112,6 +116,23 @@ class QueryExecutor implements ActionExecutor
             }
 
             $query->serializedArguments[$key] = $serializer->serialize($argument);
+        }
+    }
+
+    private function changesSchema(string $sql): bool
+    {
+        return (bool) preg_match('/^\s*(?:create|alter|drop)\b/i', $sql);
+    }
+
+    /**
+     * Finishes every cached statement of the connection that still has unread rows. Their
+     * readers keep the rows. SQLite refuses to drop or alter a table while a statement on
+     * the same connection is unfinished ("database table is locked").
+     */
+    private function releasePreparedStatements(\PDO $pdo): void
+    {
+        foreach ($this->preparedStatements[$pdo] ?? [] as $preparedStatement) {
+            $preparedStatement->release();
         }
     }
 

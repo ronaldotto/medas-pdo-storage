@@ -26,13 +26,28 @@ class PreparedStatement
 
     public function execute(array $arguments): Statement
     {
-        $this->lastReader?->get()?->takeOverUnreadRows();
+        $this->release();
         $this->pdoStatement->execute($arguments);
 
         $statement = new Statement($this);
         $this->lastReader = \WeakReference::create($statement);
 
         return $statement;
+    }
+
+    // Hands the unread rows of the last execution to its reader, which finishes the statement
+    // on the database. SQLite refuses to change the schema while a statement is unfinished.
+    public function release(): void
+    {
+        $lastReader = $this->lastReader?->get();
+
+        if ($lastReader !== null) {
+            $lastReader->takeOverUnreadRows();
+        }
+        else {
+            // Nobody reads the rows anymore
+            $this->pdoStatement->closeCursor();
+        }
     }
 
     // The columns are the same for every execution, so the driver is asked once.

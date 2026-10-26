@@ -17,7 +17,6 @@ class PreparedStatementTest extends TestCase
     public function testAReaderKeepsItsRowsWhenTheStatementRunsAgain(): void
     {
         $preparedStatement = $this->prepare('select id, name from authors where id >= ? order by id');
-
         $earlier = $preparedStatement->execute([1]);
 
         self::assertSame(['id' => 1, 'name' => 'Ada'], $earlier->fetchRecord()->data());
@@ -33,8 +32,8 @@ class PreparedStatementTest extends TestCase
     public function testTakenOverRowsCanBeReadAllAtOnce(): void
     {
         $preparedStatement = $this->prepare('select id from authors where id >= ? order by id');
-
         $earlier = $preparedStatement->execute([2]);
+
         $preparedStatement->execute([1]);
 
         self::assertSame([['id' => 2], ['id' => 3]], $this->dataOf($earlier->fetchRecords()));
@@ -44,8 +43,8 @@ class PreparedStatementTest extends TestCase
     public function testTakenOverRowsCanBeReadAsAColumn(): void
     {
         $preparedStatement = $this->prepare('select name from authors order by id');
-
         $earlier = $preparedStatement->execute([]);
+
         $preparedStatement->execute([]);
 
         self::assertSame(['Ada', 'Grace', 'Edsger'], $earlier->fetchFirstColumn());
@@ -55,38 +54,32 @@ class PreparedStatementTest extends TestCase
     // table's name, before and after the rows are taken over.
     public function testARepeatedColumnNameIsKeptApart(): void
     {
-        $preparedStatement = $this->prepare(
-            'select authors.name, books.name from books join authors on authors.id = books.author where books.id = ?'
-        );
+        $preparedStatement
+            = $this->prepare('select authors.name, books.name from books join authors on authors.id = books.author where books.id = ?');
 
         $earlier = $preparedStatement->execute([1]);
         $later = $preparedStatement->execute([1]);
-
         $expected = [['name' => 'Ada', 'books.name' => 'Notes']];
 
         self::assertSame($expected, $this->dataOf($later->fetchRecords()));
         self::assertSame($expected, $this->dataOf($earlier->fetchRecords()));
     }
 
+    /** @return array<int, array<string, mixed>> */
+    private function dataOf(array $records): array
+    {
+        return array_map(fn($record) => $record->data(), $records);
+    }
+
     public function testAStatementWithoutAResultSetCanRunAgain(): void
     {
         $preparedStatement = $this->prepare('insert into authors (id, name) values (?, ?)');
-
         $first = $preparedStatement->execute([4, 'Barbara']);
+
         $preparedStatement->execute([5, 'Donald']);
 
         self::assertFalse($first->hasRecords());
         self::assertSame(5, (int) $this->pdo->query('select count(*) from authors')->fetchColumn());
-    }
-
-    protected function setUp(): void
-    {
-        $this->pdo = new \PDO('sqlite::memory:', options: [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
-
-        $this->pdo->exec('create table authors (id integer primary key, name text)');
-        $this->pdo->exec('create table books (id integer primary key, name text, author integer)');
-        $this->pdo->exec("insert into authors (id, name) values (1, 'Ada'), (2, 'Grace'), (3, 'Edsger')");
-        $this->pdo->exec("insert into books (id, name, author) values (1, 'Notes', 1)");
     }
 
     private function prepare(string $sql): PreparedStatement
@@ -94,9 +87,16 @@ class PreparedStatementTest extends TestCase
         return new PreparedStatement($this->pdo->prepare($sql));
     }
 
-    /** @return array<int, array<string, mixed>> */
-    private function dataOf(array $records): array
+    protected function setUp(): void
     {
-        return array_map(fn($record) => $record->data(), $records);
+        $this->pdo = new \PDO(
+            'sqlite::memory:',
+            options: [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]
+        );
+
+        $this->pdo->exec('create table authors (id integer primary key, name text)');
+        $this->pdo->exec('create table books (id integer primary key, name text, author integer)');
+        $this->pdo->exec("insert into authors (id, name) values (1, 'Ada'), (2, 'Grace'), (3, 'Edsger')");
+        $this->pdo->exec("insert into books (id, name, author) values (1, 'Notes', 1)");
     }
 }

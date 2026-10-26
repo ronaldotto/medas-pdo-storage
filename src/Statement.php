@@ -29,6 +29,11 @@ class Statement implements RecordSet
 
     public function takeOverUnreadRows(): void
     {
+        // Taken over before: the statement may have run again since, for another reader
+        if ($this->takenOverRows !== null) {
+            return;
+        }
+
         $pdoStatement = $this->preparedStatement->pdoStatement;
         $this->takenOverRowCount = $pdoStatement->rowCount();
 

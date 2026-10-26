@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e8f244993b0670dbbdf45fe3d2b91e87",
+    "content-hash": "91263a4f2e4074b613660a0d2e53817d",
     "packages": [
         {
             "name": "morphp/medas-cache",
@@ -109,16 +109,16 @@
         },
         {
             "name": "morphp/medas-core",
-            "version": "v4.8.1",
+            "version": "v4.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-core.git",
-                "reference": "b09da1f852df699017b1404e6e7f528d82ae6ecb"
+                "reference": "d16853cc669c2720b3528f0c0ef47fa5d1ea9f9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/b09da1f852df699017b1404e6e7f528d82ae6ecb",
-                "reference": "b09da1f852df699017b1404e6e7f528d82ae6ecb",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/d16853cc669c2720b3528f0c0ef47fa5d1ea9f9a",
+                "reference": "d16853cc669c2720b3528f0c0ef47fa5d1ea9f9a",
                 "shasum": ""
             },
             "require": {
@@ -151,23 +151,23 @@
                 "medas"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-core/tree/v4.8.1",
+                "source": "https://github.com/tarantuli/medas-core/tree/v4.8.2",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2026-10-22T07:15:36+00:00"
+            "time": "2026-10-26T09:56:52+00:00"
         },
         {
             "name": "morphp/medas-entity-manager",
-            "version": "v3.14.0",
+            "version": "v3.14.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-entity-manager.git",
-                "reference": "98149dca24325ea5678024cb17bccbc2c1b12f36"
+                "reference": "92769088370ca2a4260b1ff6875874c48ef954f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/98149dca24325ea5678024cb17bccbc2c1b12f36",
-                "reference": "98149dca24325ea5678024cb17bccbc2c1b12f36",
+                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/92769088370ca2a4260b1ff6875874c48ef954f9",
+                "reference": "92769088370ca2a4260b1ff6875874c48ef954f9",
                 "shasum": ""
             },
             "require": {
@@ -207,10 +207,10 @@
                 "entities"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-entity-manager/tree/v3.14.0",
+                "source": "https://github.com/tarantuli/medas-entity-manager/tree/v3.14.1",
                 "issues": "https://github.com/tarantuli/medas-entity-manager/issues"
             },
-            "time": "2026-10-22T09:01:10+00:00"
+            "time": "2026-10-26T10:02:30+00:00"
         },
         {
             "name": "morphp/medas-file-system",
@@ -472,16 +472,16 @@
         },
         {
             "name": "morphp/medas-storage-manager",
-            "version": "v4.5.8",
+            "version": "v4.5.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-storage-manager.git",
-                "reference": "0f1060a0ef1ce762619d8c3c77c3ee5330520455"
+                "reference": "544c702bb862f26097c4e419d98964991ce6afaf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-storage-manager/zipball/0f1060a0ef1ce762619d8c3c77c3ee5330520455",
-                "reference": "0f1060a0ef1ce762619d8c3c77c3ee5330520455",
+                "url": "https://api.github.com/repos/tarantuli/medas-storage-manager/zipball/544c702bb862f26097c4e419d98964991ce6afaf",
+                "reference": "544c702bb862f26097c4e419d98964991ce6afaf",
                 "shasum": ""
             },
             "require": {
@@ -522,10 +522,10 @@
                 "storage"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-storage-manager/tree/v4.5.8",
+                "source": "https://github.com/tarantuli/medas-storage-manager/tree/v4.5.9",
                 "issues": "https://github.com/tarantuli/medas-storage-manager/issues"
             },
-            "time": "2026-10-22T08:00:37+00:00"
+            "time": "2026-10-26T10:03:18+00:00"
         },
         {
             "name": "psr/event-dispatcher",
@@ -3242,16 +3242,16 @@
         },
         {
             "name": "vlucas/phpdotenv",
-            "version": "v5.7.0",
+            "version": "v5.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpdotenv/phpdotenv.git",
-                "reference": "301c07936b16d88628b126b01d082ba153cf4c40"
+                "reference": "96149103e62ac67e915f6d2ef59b72dee2e011e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpdotenv/phpdotenv/zipball/301c07936b16d88628b126b01d082ba153cf4c40",
-                "reference": "301c07936b16d88628b126b01d082ba153cf4c40",
+                "url": "https://api.github.com/repos/phpdotenv/phpdotenv/zipball/96149103e62ac67e915f6d2ef59b72dee2e011e0",
+                "reference": "96149103e62ac67e915f6d2ef59b72dee2e011e0",
                 "shasum": ""
             },
             "require": {
@@ -3278,7 +3278,7 @@
                     "forward-command": false
                 },
                 "branch-alias": {
-                    "dev-master": "5.6-dev"
+                    "dev-master": "5.8-dev"
                 }
             },
             "autoload": {
@@ -3309,8 +3309,8 @@
                 "environment"
             ],
             "support": {
-                "issues": "https://github.com/vlucas/phpdotenv/issues",
-                "source": "https://github.com/vlucas/phpdotenv/tree/v5.7.0"
+                "issues": "https://github.com/phpdotenv/phpdotenv/issues",
+                "source": "https://github.com/phpdotenv/phpdotenv/tree/v5.8.0"
             },
             "funding": [
                 {
@@ -3322,7 +3322,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-08-24T18:07:49+00:00"
+            "time": "2026-10-25T16:26:19+00:00"
         }
     ],
     "aliases": [],

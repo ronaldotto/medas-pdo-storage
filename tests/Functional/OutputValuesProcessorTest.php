@@ -37,7 +37,10 @@ class OutputValuesProcessorTest extends TestCase
             Max::c(Property::c('role', 'Joined'))->as('role'),
         ]);
 
-        self::assertSame(['min(entities.`depth`) as depth', 'max(joined.`role`) as role'], $job->outputValues);
+        self::assertSame(
+            ['min(entities.`depth`) as depth', 'max(joined.`role`) as role'],
+            $job->outputValues
+        );
     }
 
     private function createJob(): Job
