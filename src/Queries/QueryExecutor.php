@@ -6,6 +6,7 @@ namespace Medas\PdoStorage\Queries;
 
 use Medas\Core\{
     Attributes\ConfigValue,
+    Attributes\EventListener,
     Attributes\Service,
     ConfigOptions\DispatchDebugInformation,
     Events\DebugInformation,
@@ -15,6 +16,7 @@ use Medas\PdoStorage\{
     Database,
     DatabaseController,
     Events\DatabaseControllerRequest,
+    Events\DatabaseInitialized,
     Exceptions\PdoDatabase,
     PreparedStatement
 };
@@ -101,6 +103,14 @@ class QueryExecutor implements ActionExecutor
     private function databaseController(Database $database): DatabaseController
     {
         return $this->databaseControllers[$database->name] ??= dispatch(new DatabaseControllerRequest($database))->databaseController;
+    }
+
+    // The database was replaced under the same name: its next statement asks for the new
+    // controller. The old connection's prepared statements go with that connection.
+    #[EventListener]
+    public function forgetController(DatabaseInitialized $event): void
+    {
+        unset($this->databaseControllers[$event->database->name]);
     }
 
     /**

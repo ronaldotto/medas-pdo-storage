@@ -47,6 +47,8 @@ class PdoStorageController implements StorageController
         if (count($this->controllers) === 1) {
             $this->defaultDatabase = $storage;
         }
+
+        dispatch(new Events\DatabaseInitialized($storage));
     }
 
     public function handles(Storage $storage): bool
