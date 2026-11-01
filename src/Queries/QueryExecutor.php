@@ -106,10 +106,20 @@ class QueryExecutor implements ActionExecutor
     }
 
     // The database was replaced under the same name: its next statement asks for the new
-    // controller. The old connection's prepared statements go with that connection.
+    // controller.
     #[EventListener]
     public function forgetController(DatabaseInitialized $event): void
     {
+        $previous = $this->databaseControllers[$event->database->name] ?? null;
+
+        // Its prepared statements are dropped explicitly. Each one holds its connection,
+        // so the weak map's key would never be let go, and every replaced connection
+        // would stay open until the process ends ("Too many connections").
+        if ($previous !== null) {
+            $this->releasePreparedStatements($previous->pdo);
+            unset($this->preparedStatements[$previous->pdo]);
+        }
+
         unset($this->databaseControllers[$event->database->name]);
     }
 
